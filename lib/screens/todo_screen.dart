@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app_monstr/providers/todo_provider.dart';
 
@@ -60,13 +61,41 @@ class TodoScreen extends StatelessWidget {
                   itemCount: TodoProvider.todos.length,
                   itemBuilder: (context, index) {
                     final todo = TodoProvider.todos[index];
-                    return ListTile(
-                      title: Text(todo.title),
-                      trailing: IconButton(
-                        onPressed: () {
-                          TodoProvider.removeTodo(index);
-                        },
-                        icon: Icon(Icons.delete),
+                    return Slidable(
+                      startActionPane: ActionPane(
+                        motion: const DrawerMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) {
+                              TodoProvider.removeTodo(index);
+                            },
+                            backgroundColor: const Color(0xFFFE4A49),
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: 'Delete',
+                          ),
+                        ],
+                      ),
+                      endActionPane: ActionPane(
+                        motion: DrawerMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: null,
+                            backgroundColor: Color(0xFF7BC043),
+                            foregroundColor: Colors.white,
+                            icon: Icons.archive,
+                            label: 'Archive',
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        title: Text(todo.title),
+                        /* trailing: IconButton(
+                          onPressed: () {
+                            TodoProvider.removeTodo(index);
+                          },
+                          icon: Icon(Icons.delete),
+                        ), */
                       ),
                     );
                   },
